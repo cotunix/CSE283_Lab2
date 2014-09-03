@@ -15,30 +15,40 @@ import java.util.*;
 public class Lab2Server {
 	public static final int PORT=4242;
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		DatagramSocket s=null;
 
 		try {
 			// construct a datagram socket listening on port PORT:
-			
+			s = new DatagramSocket(PORT);
 			// for convenience, the server should tell us what addresses it's listening on;
 			// see DatagramSocket.getLocalSocketAddress() and InetAddress.getLocalHost().
 			
 			// you will probably want to output something like:
 			//   "Lab2Server listening on: <ip address>:<port>"			
-			
+			System.out.printf("Lab2Server listening on %s:%s \n", InetAddress.getLocalHost(), s.getLocalSocketAddress());
 			while(true) {
 				// receive a datagram packet that tells the server how many packets to send, their size in bytes, and their rate: 
-
+				byte[] b = new byte[5];
+				DatagramPacket pack = new DatagramPacket(b, 5);
+				s.receive(pack);
 				// for each packet you're supposed to send:
-				
+				ByteArrayInputStream input = new ByteArrayInputStream(pack.getData());
+				DataInputStream in = new DataInputStream(input);
+				byte rate = in.readByte();
+				short numPack = in.readShort();
+				short size = in.readShort();
 				// - assemble the packet
-				
-				// - wait the right amount of time to hit the requested sending rate
-				// see: Object.wait(long millis) and the concurrency lesson listed in the lab description
-				
-				// - send the packet
-				// end loop
+				for (int i = 0; i < numPack; i++) {
+					DatagramPacket sendPack = new DatagramPacket(new byte[size], size);
+					// - wait the right amount of time to hit the requested sending rate
+					// see: Object.wait(long millis) and the concurrency lesson listed in the lab description
+					sendPack.wait(rate);
+					// - send the packet
+					// end loop
+					s.send(sendPack);
+					}
+	
 			}
 		} catch(SocketException ex) { // this will not compile until you start filling in the socket code
 			System.out.println("Could not open socket (is the server already running?).");

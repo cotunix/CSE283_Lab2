@@ -31,13 +31,26 @@ public class Lab2Client {
 		}
 
 		// Construct a socket to use for communication (see: DatagramSocket):
-		DatagramSocket s=null;
+		DatagramSocket s= new DatagramSocket();
 		try {
 			// assemble the first packet to communicate the packet stream parameters to the server:
-
+			byte[] packData = new byte[5];
+			ByteArrayOutputStream b = new ByteArrayOutputStream();
+			DataOutputStream d = new DataOutputStream(b);
+			d.writeByte(Byte.parseByte(args[3]));
+			d.writeShort(Short.parseShort(args[1]));
+			d.writeShort(Short.parseShort(args[2]));
+			packData = b.toByteArray();
+			
+			InetAddress i = InetAddress.getByName(args[0]);
+			DatagramPacket tpack = new DatagramPacket(packData, packData.length);
 			// send it:
+			s.connect(i, PORT);			
+			s.send(tpack);
 			
 			// receive a bunch of packets from the server:
+			long time = System.currentTimeMillis();
+			
 			
 			// calculate bytes/second (see System.currentTimeMillis() or System.nanoTime())
 			double throughput=0.0;
