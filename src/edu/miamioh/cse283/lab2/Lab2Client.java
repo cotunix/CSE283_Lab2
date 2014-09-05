@@ -44,35 +44,37 @@ public class Lab2Client {
 			packData = b.toByteArray();
 			
 			InetAddress i = InetAddress.getByName(args[0]);
-			DatagramPacket tpack = new DatagramPacket(packData, packData.length);
+			DatagramPacket tpack = new DatagramPacket(packData, packData.length, i ,PORT);
 			// send it:
-			s.connect(i, PORT);			
+					
 			s.send(tpack);
 			
 			// receive a bunch of packets from the server:
 			long time = System.currentTimeMillis();
 			int bytesReceived = 0;
 			int loops = 0;
-			
+			int size = Integer.parseInt(args[2]);
+			DatagramPacket rpack = new DatagramPacket(new byte[size], size);
 			while(true) {
-				s.receive(tpack);
-				byte[] tpackData = tpack.getData();
-				if (tpackData[0] == 254) {
+				s.receive(rpack);
+				byte[] rpackData = rpack.getData();
+				if (rpackData[0] == -1) {
 					break;
 				}
-				bytesReceived += tpackData.length;
+				bytesReceived += rpack.getLength();
 				System.out.println(loops);
 				loops++;
 				
 			}
-			time = System.currentTimeMillis() - time;
-			
+			long endTime = System.currentTimeMillis();
+			double timeSec = endTime - time;
+			timeSec /= 1000;
 			// calculate bytes/second (see System.currentTimeMillis() or System.nanoTime())
-			double throughput=bytesReceived / time;
-			System.out.println("Measured throughput is: " + throughput + " bytes/millisecond");
+			double throughput=(bytesReceived / timeSec);
+			System.out.println("Measured throughput is: " + throughput + " bytes/second");
 
 			// calculate packet loss:
-			double packetLoss=((Integer.parseInt(args[1]) - loops) / time);
+			double packetLoss=((Integer.parseInt(args[1]) - loops) / timeSec);
 			System.out.println("Packet loss averages: " + packetLoss + "packets/second");
 			
 		} finally {
