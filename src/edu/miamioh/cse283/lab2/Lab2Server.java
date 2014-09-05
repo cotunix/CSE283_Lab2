@@ -40,9 +40,6 @@ public class Lab2Server {
 				byte rate = in.readByte();
 				short numPack = in.readShort();
 				short size = in.readShort();
-				System.out.println(rate);
-				System.out.println(numPack);
-				System.out.println(size);
 				// - assemble the packet
 				
 				for (int i = 0; i < numPack; i++) {
