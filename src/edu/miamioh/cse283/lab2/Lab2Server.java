@@ -32,22 +32,31 @@ public class Lab2Server {
 				byte[] b = new byte[5];
 				DatagramPacket pack = new DatagramPacket(b, 5);
 				s.receive(pack);
+				InetAddress clientAdd = pack.getAddress();
+				int clientPort = pack.getPort();
 				// for each packet you're supposed to send:
 				ByteArrayInputStream input = new ByteArrayInputStream(pack.getData());
 				DataInputStream in = new DataInputStream(input);
 				byte rate = in.readByte();
 				short numPack = in.readShort();
 				short size = in.readShort();
+				System.out.println(rate);
+				System.out.println(numPack);
+				System.out.println(size);
 				// - assemble the packet
+				
 				for (int i = 0; i < numPack; i++) {
-					DatagramPacket sendPack = new DatagramPacket(new byte[size], size);
+					DatagramPacket sendPack = new DatagramPacket(new byte[size], size,clientAdd, clientPort);
 					// - wait the right amount of time to hit the requested sending rate
 					// see: Object.wait(long millis) and the concurrency lesson listed in the lab description
-					sendPack.wait(rate);
+					Thread.sleep(rate);
 					// - send the packet
 					// end loop
 					s.send(sendPack);
 					}
+				System.out.println("Done sending packets");
+				byte[] end = {(byte) 254};
+				s.send(new DatagramPacket(end, 1, clientAdd, clientPort));
 	
 			}
 		} catch(SocketException ex) { // this will not compile until you start filling in the socket code

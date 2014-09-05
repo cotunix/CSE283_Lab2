@@ -33,6 +33,7 @@ public class Lab2Client {
 		// Construct a socket to use for communication (see: DatagramSocket):
 		DatagramSocket s= new DatagramSocket();
 		try {
+			System.out.println("pls");
 			// assemble the first packet to communicate the packet stream parameters to the server:
 			byte[] packData = new byte[5];
 			ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -50,14 +51,28 @@ public class Lab2Client {
 			
 			// receive a bunch of packets from the server:
 			long time = System.currentTimeMillis();
+			int bytesReceived = 0;
+			int loops = 0;
 			
+			while(true) {
+				s.receive(tpack);
+				byte[] tpackData = tpack.getData();
+				if (tpackData[0] == 254) {
+					break;
+				}
+				bytesReceived += tpackData.length;
+				System.out.println(loops);
+				loops++;
+				
+			}
+			time = System.currentTimeMillis() - time;
 			
 			// calculate bytes/second (see System.currentTimeMillis() or System.nanoTime())
-			double throughput=0.0;
-			System.out.println("Measured throughput is: " + throughput + " bytes/second");
+			double throughput=bytesReceived / time;
+			System.out.println("Measured throughput is: " + throughput + " bytes/millisecond");
 
 			// calculate packet loss:
-			double packetLoss=0.0;
+			double packetLoss=((Integer.parseInt(args[1]) - loops) / time);
 			System.out.println("Packet loss averages: " + packetLoss + "packets/second");
 			
 		} finally {
