@@ -54,7 +54,6 @@ public class Lab2Server {
 					// end loop
 					s.send(sendPack);
 					}
-				System.out.println("Done sending packets");
 				byte[] end = {-1};
 				s.send(new DatagramPacket(end, 1, clientAdd, clientPort));
 	

@@ -33,7 +33,6 @@ public class Lab2Client {
 		// Construct a socket to use for communication (see: DatagramSocket):
 		DatagramSocket s= new DatagramSocket();
 		try {
-			System.out.println("pls");
 			// assemble the first packet to communicate the packet stream parameters to the server:
 			byte[] packData = new byte[5];
 			ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -62,7 +61,6 @@ public class Lab2Client {
 					break;
 				}
 				bytesReceived += rpack.getLength();
-				System.out.println(loops);
 				loops++;
 				
 			}
