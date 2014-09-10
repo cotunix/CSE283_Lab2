@@ -60,18 +60,17 @@ public class Lab2Client {
 			DatagramPacket rpack = new DatagramPacket(new byte[size], size);
 			// start time on receiving the packets
 			long time = System.nanoTime();
-			while (true) {
-				s.receive(rpack);
-				byte[] rpackData = rpack.getData();
-				if (rpackData[0] == -1) {
-					break;
+			s.setSoTimeout(260);
+			try {
+				while (true) {
+					s.receive(rpack);
+					bytesReceived += rpack.getLength();
+					loops++;
 				}
-				bytesReceived += rpack.getLength();
-				loops++;
-
+			} catch (SocketTimeoutException e) {
 			}
 			// finished receiving; end time
-			long endTime = System.nanoTime();
+			long endTime = System.nanoTime() - 260000000;
 			double timeSec = endTime - time;
 			// convert to seconds
 			timeSec /= 1000000000;

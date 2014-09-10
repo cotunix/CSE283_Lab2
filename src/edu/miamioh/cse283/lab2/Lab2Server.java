@@ -52,9 +52,7 @@ public class Lab2Server {
 					// - send the packet
 					s.send(sendPack);
 				}
-				byte[] end = { -1 };
-				for (int i = 0; i < 10; i++)
-					s.send(new DatagramPacket(end, 1, clientAdd, clientPort));
+			
 
 			}
 		} catch (SocketException ex) { // this will not compile until you start
