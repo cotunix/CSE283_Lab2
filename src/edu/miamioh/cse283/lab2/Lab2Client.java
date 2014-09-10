@@ -35,6 +35,7 @@ public class Lab2Client {
 		try {
 			// assemble the first packet to communicate the packet stream parameters to the server:
 			byte[] packData = new byte[5];
+			// packing data into a byte array
 			ByteArrayOutputStream b = new ByteArrayOutputStream();
 			DataOutputStream d = new DataOutputStream(b);
 			d.writeByte(Byte.parseByte(args[3]));
@@ -42,18 +43,21 @@ public class Lab2Client {
 			d.writeShort(Short.parseShort(args[2]));
 			packData = b.toByteArray();
 			
+			// construct the packet using ip address from args[0] and port 4242
 			InetAddress i = InetAddress.getByName(args[0]);
 			DatagramPacket tpack = new DatagramPacket(packData, packData.length, i ,PORT);
-			// send it:
-					
+			
+			// send the packet
 			s.send(tpack);
 			
 			// receive a bunch of packets from the server:
-			long time = System.currentTimeMillis();
+			
 			int bytesReceived = 0;
 			int loops = 0;
 			int size = Integer.parseInt(args[2]);
 			DatagramPacket rpack = new DatagramPacket(new byte[size], size);
+			// start time on receiving the packets
+			long time = System.currentTimeMillis();
 			while(true) {
 				s.receive(rpack);
 				byte[] rpackData = rpack.getData();
@@ -64,8 +68,10 @@ public class Lab2Client {
 				loops++;
 				
 			}
+			// finished receiving - end time
 			long endTime = System.currentTimeMillis();
 			double timeSec = endTime - time;
+			// convert to seconds
 			timeSec /= 1000;
 			// calculate bytes/second (see System.currentTimeMillis() or System.nanoTime())
 			double throughput=(bytesReceived / timeSec);
