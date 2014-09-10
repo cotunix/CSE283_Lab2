@@ -3,7 +3,6 @@ package edu.miamioh.cse283.lab2;
 import java.io.*;
 import java.net.*;
 
-
 /**
  * Template server for CSE283 Lab2, FS2014.
  * 
@@ -22,9 +21,9 @@ public class Lab2Server {
 		try {
 			// construct a datagram socket listening on port PORT:
 			s = new DatagramSocket(PORT);
-			// 
+			//
 			System.out.printf("Lab2Server listening on %s:%s \n",
-					InetAddress.getLocalHost() ,s.getLocalPort());
+					InetAddress.getLocalHost(), s.getLocalPort());
 			while (true) {
 				// receive a datagram packet that tells the server how many
 				// packets to send, their size in bytes, and their rate:
@@ -54,11 +53,8 @@ public class Lab2Server {
 					s.send(sendPack);
 				}
 				byte[] end = { -1 };
-				// send 10 packets consisting of -1, just to be sure the client
-				// receives one of them, because why not.
-				for (int i = 0; i < 10; i++) {
+				for (int i = 0; i < 10; i++)
 					s.send(new DatagramPacket(end, 1, clientAdd, clientPort));
-				}
 
 			}
 		} catch (SocketException ex) { // this will not compile until you start
