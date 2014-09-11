@@ -60,7 +60,7 @@ public class Lab2Client {
 			DatagramPacket rpack = new DatagramPacket(new byte[size], size);
 			// start time on receiving the packets
 			long time = System.nanoTime();
-			s.setSoTimeout(260);
+			s.setSoTimeout(2000);
 			try {
 				while (true) {
 					s.receive(rpack);
@@ -70,12 +70,13 @@ public class Lab2Client {
 			} catch (SocketTimeoutException e) {
 			}
 			// finished receiving; end time
-			long endTime = System.nanoTime() - 260000000;
+			double endTime = System.nanoTime() - 2000000000;
 			double timeSec = endTime - time;
 			// convert to seconds
 			timeSec /= 1000000000;
 			// calculate bytes/second (see System.currentTimeMillis() or
 			// System.nanoTime())
+			System.out.println(timeSec + " seconds elapsed."); 
 			double throughput = (bytesReceived / timeSec);
 			System.out.println("Measured throughput is: " + throughput
 					+ " bytes/second");
