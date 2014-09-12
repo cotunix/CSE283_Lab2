@@ -43,9 +43,9 @@ public class Lab2Server {
 				short size = in.readShort();
 				// - assemble the packet
 
-				for (int i = 0; i < numPack; i++) {
-					DatagramPacket sendPack = new DatagramPacket(
-							new byte[size], size, clientAdd, clientPort);
+				DatagramPacket sendPack = new DatagramPacket(
+						new byte[size], size, clientAdd, clientPort);
+				for (int i = 0; i < numPack; i++) {					
 					// - wait the right amount of time to hit the requested
 					// sending rate
 					Thread.sleep(rate);
@@ -55,8 +55,7 @@ public class Lab2Server {
 			
 
 			}
-		} catch (SocketException ex) { // this will not compile until you start
-										// filling in the socket code
+		} catch (SocketException ex) {
 			System.out
 					.println("Could not open socket (is the server already running?).");
 		} finally {
